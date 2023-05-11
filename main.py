@@ -5,7 +5,7 @@ from aiogram.dispatcher.filters import Command, CommandStart
 from asyncio import sleep
 
 from config import BOT_TOKEN, ADMIN_ID
-from create import image_create_openai
+from create import images_create
 from db import DataBase
 
 # Configure logging
@@ -38,14 +38,13 @@ async def send_admin(msg: types.Message):
 
 @dp.message_handler(content_types=types.ContentTypes.TEXT)
 async def send_photo(message: types.Message):
-    img = image_create_openai(message.text)
     passbar = await bot.send_message(message.from_user.id, text=10*'⬜'+'0%')
+    img = images_create(message.text)
     for i in range(1, 11):
         green = i*'🟩'
         white = (10-i) * '⬜'
         await bot.send_chat_action(message.from_user.id, types.ChatActions.UPLOAD_PHOTO)
         await passbar.edit_text(f"{green}{white} {i*10}%")
-        await sleep(1)
     await passbar.delete()
     await message.answer_photo(img,
                                caption='Sizning rasmigiz.\n \nAgar rasm siz hohlaganday'
@@ -57,4 +56,4 @@ async def send_err(msg: types.Message):
     await msg.answer("Siz mavjud bolmagan buyruq berdigiz.")
 
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+    executor.start_polling(dp)
