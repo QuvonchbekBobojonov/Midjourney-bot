@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Command, CommandStart
 from asyncio import sleep
 
-from config import BOT_TOKEN, ADMIN_ID
+from config import BOT_TOKEN, ADMIN_ID, HOST, PORT, PASSWORD, USER, DATABESE
 from create import images_create
 from db import DataBase
 
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 # Initialize bot and dispatcher
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
-db = DataBase(path="database.db")
+db = DataBase(host=HOST, port=PORT, database=DATABESE, user="postgres", password=PASSWORD)
 
 
 @dp.message_handler(CommandStart())
@@ -33,6 +33,7 @@ async def send_welcome(message: types.Message):
 @dp.message_handler(Command('admin'))
 async def send_admin(msg: types.Message):
     users = db.get_users()
+    chat_id = msg.chat.id
     await msg.answer(f'Foydalanuvchilar: {len(users)}')
 
 
@@ -56,4 +57,4 @@ async def send_err(msg: types.Message):
     await msg.answer("Siz mavjud bolmagan buyruq berdigiz.")
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    executor.start_polling(dp, skip_updates=True)
