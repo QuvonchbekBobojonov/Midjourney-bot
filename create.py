@@ -16,7 +16,7 @@ def image_create_openai(text):
     return response["data"][0]["url"]
 
 def images_create(text):
-    text = GoogleTranslator(source='auto', target='en').translate(text)
+    text = GoogleTranslator(source='uz', target='en').translate(text)
 
     r = requests.post('https://clipdrop-api.co/text-to-image/v1',
       files = {
