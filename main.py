@@ -39,6 +39,13 @@ async def send_admin(msg: types.Message):
 
 @dp.message_handler(content_types=types.ContentTypes.TEXT)
 async def send_photo(message: types.Message):
+    user_id = message.from_user.id
+    username = message.from_user.full_name
+    if not db.user_exists(user_id):
+        db.create_user(user_id)
+        await bot.send_message(ADMIN_ID, "🆕 Yangi Foydalanuvchi! \n"
+                                         f"Umumiy: [{len(db.get_users())}] \n"
+                                         f"Ismi: {username}")
     passbar = await bot.send_message(message.from_user.id, text=10*'⬜'+'0%')
     img = images_create(message.text)
     for i in range(1, 11):
@@ -54,6 +61,13 @@ async def send_photo(message: types.Message):
 
 @dp.message_handler(content_types=types.ContentTypes.ANY)
 async def send_err(msg: types.Message):
+    user_id = message.from_user.id
+    username = message.from_user.full_name
+    if not db.user_exists(user_id):
+        db.create_user(user_id)
+        await bot.send_message(ADMIN_ID, "🆕 Yangi Foydalanuvchi! \n"
+                                         f"Umumiy: [{len(db.get_users())}] \n"
+                                         f"Ismi: {username}")
     await msg.answer("Siz mavjud bolmagan buyruq berdigiz.")
 
 if __name__ == '__main__':
