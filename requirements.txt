@@ -4,4 +4,3 @@ environs==9.5.0
 pip-chill==1.0.3
 psycopg2==2.9.6
 python-socketio==5.8.0
-requests
