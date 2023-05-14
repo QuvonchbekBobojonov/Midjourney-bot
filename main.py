@@ -58,10 +58,6 @@ async def send_welcome(message: types.Message):
 async def send_admin(msg: types.Message):
     users = db.get_users()
     chat_id = msg.chat.id
-    text = msg.text
-    if text.startswith('/admin '):
-       password = text.split('/admin ')[1]
-    print(password)
     await msg.answer(f'Foydalanuvchilar: {len(users)}')
 
 @dp.message_handler(Command('token'))
