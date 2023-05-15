@@ -24,8 +24,10 @@ def images_create(text):
     print(r.status_code)
     if r.status_code == 200:
        return r.content
-    else:
+    elif r.status_code == 402:
         db.delete_token(token=API_TOKEN)
+        images_create(text)
+    else:
         images_create(text)
 
 
