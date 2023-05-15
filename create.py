@@ -24,12 +24,11 @@ def images_create(text):
     print(r.status_code)
     if r.status_code == 200:
        return r.content
-    elif r.status_code == 402:
+    elif r.status_code in [402]:
         db.delete_token(token=API_TOKEN)
         images_create(text)
-    else:
-        images_create(text)
-
+    elif r.status_code == 422:
+        return 'err'
 
 if __name__ == "__main__":
     from PIL import Image
