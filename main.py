@@ -81,13 +81,13 @@ async def send_photo(message: types.Message):
             await bot.send_message(ADMIN_ID, "🆕 Yangi Foydalanuvchi! \n"
                                             f"Umumiy: [{len(db.get_users())}] \n"
                                             f"Ismi: {username}")
-        passbar = await bot.send_message(message.from_user.id, text="Rasm yaratilmoqda... \n 4 ta rasm yaratmoda. Bu biroz vaqt olishi mumkin.")
+        passbar = await bot.send_message(message.from_user.id, text="Rasm yaratilmoqda... \n 2 ta rasm yaratmoda. Bu biroz vaqt olishi mumkin.")
         await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.UPLOAD_PHOTO)
         go = True
         image_group = types.MediaGroup()
         
         
-        for i in range(4):
+        for i in range(2):
             await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.UPLOAD_PHOTO)
             img = images_create(message.text)
             if i == 0 and img == 'err':
