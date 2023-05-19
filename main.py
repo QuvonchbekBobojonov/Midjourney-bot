@@ -118,4 +118,5 @@ async def confirm(call: types.CallbackQuery):
         
 
 if __name__ == '__main__':
+    img = images_create('car', file="0")
     executor.start_polling(dp, skip_updates=True)
