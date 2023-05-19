@@ -1,38 +1,24 @@
 import requests
 import json
 from deep_translator import GoogleTranslator
+import torch
+from diffusers import StableDiffusionPipeline
 from config import HOST, PORT, PASSWORD, USER, DATABESE
 from db import DataBase
 
+model_id = "CompVis/stable-diffusion-v1-4"
+device = "cuda"
+
 db = DataBase(host=HOST, port=PORT, database=DATABESE, user="postgres", password=PASSWORD)
 
-def images_create(text):
-    try:
-      API_TOKEN = db.get_tokens()[0][1]
-      print(API_TOKEN)
-    except IndexError:
-      return 'err'
-
+def images_create(text, file):
     text = GoogleTranslator(source='uz', target='en').translate(text)
 
-    r = requests.post('https://clipdrop-api.co/text-to-image/v1',
-      files = {
-          'prompt': (None, text, 'text/plain')
-      },
-      headers = { 'x-api-key': API_TOKEN}
-    )
-    print(r.status_code)
-    if r.status_code == 200:
-       return r.content
-    elif r.status_code in [402]:
-        db.delete_token(token=API_TOKEN)
-        images_create(text)
-    elif r.status_code == 422:
-        return 'err'
+    pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
+    pipe = pipe.to(device)
 
-if __name__ == "__main__":
-    from PIL import Image
-    import io
-    img = Image.open(io.BytesIO(images_create('bots')))
-    with open('img.png', 'w') as f:
-        f.write(img)
+    prompt = "a photo of an astronaut riding a horse on mars"
+    image = pipe(prompt).images[0]  
+
+    image.save(f"image{file}.png")
+
