@@ -9,3 +9,4 @@ diffusers
 transformers
 scipy
 torch
+accelerate
