@@ -85,27 +85,10 @@ async def send_photo(message: types.Message):
         await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.UPLOAD_PHOTO)
         go = True
         image_group = types.MediaGroup()
-        
-        
         for i in range(2):
             await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.UPLOAD_PHOTO)
-            img = images_create(message.text)
-            if i == 0 and img == 'err':
-                go = False
-                break
-            elif img == 'err':
-                pass
-            else:
-                try:
-                    with open(f'image{i}.png', 'wb') as f:
-                        f.write(img)
-                    image_group.attach_photo(open(f"image{i}.png", 'rb'))
-                except TypeError:
-                    pass
-        if go == False:
-            await passbar.delete()
-            await message.answer("Biz qandaydir xatolik yuzberdi \n iltimos keyinroq qayta urinib ko'ring.")
-        else:
+            img = images_create(message.text, file=i)
+            image_group.attach_photo(open(f"image{i}.png", 'rb'))
             await passbar.delete()
             await message.answer_media_group(image_group)
     else:
