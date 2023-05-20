@@ -81,14 +81,31 @@ async def send_photo(message: types.Message):
             await bot.send_message(ADMIN_ID, "🆕 Yangi Foydalanuvchi! \n"
                                             f"Umumiy: [{len(db.get_users())}] \n"
                                             f"Ismi: {username}")
-        passbar = await bot.send_message(message.from_user.id, text="Rasm yaratilmoqda... \n 2 ta rasm yaratmoda. Bu biroz vaqt olishi mumkin.")
+        passbar = await bot.send_message(message.from_user.id, text="Rasm yaratilmoqda... \n 4 ta rasm yaratmoda. Bu biroz vaqt olishi mumkin.")
         await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.UPLOAD_PHOTO)
         go = True
         image_group = types.MediaGroup()
-        for i in range(2):
+        
+        
+        for i in range(4):
             await bot.send_chat_action(chat_id=user_id, action=types.ChatActions.UPLOAD_PHOTO)
-            img = images_create(message.text, file=i)
-            image_group.attach_photo(open(f"image{i}.png", 'rb'))
+            img = images_create(message.text)
+            if i == 0 and img == 'err':
+                go = False
+                break
+            elif img == 'err':
+                pass
+            else:
+                try:
+                    with open(f'image{i}.png', 'wb') as f:
+                        f.write(img)
+                    image_group.attach_photo(open(f"image{i}.png", 'rb'))
+                except TypeError:
+                    pass
+        if go == False:
+            await passbar.delete()
+            await message.answer("Biz qandaydir xatolik yuzberdi \n iltimos keyinroq qayta urinib ko'ring.")
+        else:
             await passbar.delete()
             await message.answer_media_group(image_group)
     else:
@@ -118,5 +135,4 @@ async def confirm(call: types.CallbackQuery):
         
 
 if __name__ == '__main__':
-    img = images_create('car', file="0")
     executor.start_polling(dp, skip_updates=True)
