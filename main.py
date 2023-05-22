@@ -16,10 +16,11 @@ logging.basicConfig(level=logging.INFO)
 
 bottons = types.InlineKeyboardMarkup()
 btn = types.InlineKeyboardButton(text="1 - Kanal", url="https://t.me/moorfo_uz")
-btn = types.InlineKeyboardButton(text="2 - Kanal", url="https://t.me/nematsadullayev")
+btn1 = types.InlineKeyboardButton(text="2 - Kanal", url="https://t.me/nematsadullayev")
 confirm_btn = types.InlineKeyboardButton(text="Tastiqlash", callback_data='t')
 
 bottons.add(btn)
+bottons.add(btn1)
 bottons.add(confirm_btn)
 
 # Initialize bot and dispatcher
