@@ -15,7 +15,8 @@ from db import DataBase
 logging.basicConfig(level=logging.INFO)
 
 bottons = types.InlineKeyboardMarkup()
-btn = types.InlineKeyboardButton(text="Kanal", url="https://t.me/moorfo_uz")
+btn = types.InlineKeyboardButton(text="1 - Kanal", url="https://t.me/moorfo_uz")
+btn = types.InlineKeyboardButton(text="2 - Kanal", url="https://t.me/nematsadullayev")
 confirm_btn = types.InlineKeyboardButton(text="Tastiqlash", callback_data='t')
 
 bottons.add(btn)
@@ -27,6 +28,7 @@ dp = Dispatcher(bot)
 db = DataBase(host=HOST, port=PORT, database=DATABESE, user="postgres", password=PASSWORD)
 
 channel_id = "@moorfo_uz"
+channel_id_1 = "@nematsadullayev"
 
 def check_sub_channel(chat_member):
     if chat_member['status'] != 'left':
@@ -38,7 +40,7 @@ def check_sub_channel(chat_member):
 async def send_welcome(message: types.Message):
     user = message.from_user.id
     chat_id = message.from_user.id
-    if check_sub_channel(await bot.get_chat_member(chat_id=channel_id, user_id=user)):
+    if check_sub_channel(await bot.get_chat_member(chat_id=channel_id, user_id=user)) and check_sub_channel(await bot.get_chat_member(chat_id=channel_id_1, user_id=user)):
         await message.reply(f"Assalomu aleykum {message.from_user.first_name}\n"
                         f"siz qanday rasm chizishimni hohlaysiz.")
     else:
@@ -75,7 +77,7 @@ async def send_photo(message: types.Message):
     user_id = message.from_user.id
     username = message.from_user.full_name
     
-    if check_sub_channel(await bot.get_chat_member(chat_id=channel_id, user_id=user_id)):
+    if check_sub_channel(await bot.get_chat_member(chat_id=channel_id, user_id=user)) and check_sub_channel(await bot.get_chat_member(chat_id=channel_id_1, user_id=user)):
         if not db.user_exists(user_id):
             db.create_user(user_id)
             await bot.send_message(ADMIN_ID, "🆕 Yangi Foydalanuvchi! \n"
@@ -127,7 +129,7 @@ async def send_err(msg: types.Message):
 @dp.callback_query_handler(text='t')
 async def confirm(call: types.CallbackQuery):
     user = call.from_user.id
-    if check_sub_channel(await bot.get_chat_member(chat_id=channel_id, user_id=user)):
+    if check_sub_channel(await bot.get_chat_member(chat_id=channel_id, user_id=user)) and check_sub_channel(await bot.get_chat_member(chat_id=channel_id_1, user_id=user)):
         await call.message.delete()
         await call.message.answer(f"Siz qanday rasm chizishimni hohlaysiz.")
     else:
