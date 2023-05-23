@@ -78,7 +78,7 @@ async def send_photo(message: types.Message):
     user_id = message.from_user.id
     username = message.from_user.full_name
     
-    if check_sub_channel(await bot.get_chat_member(chat_id=channel_id, user_id=user)) and check_sub_channel(await bot.get_chat_member(chat_id=channel_id_1, user_id=user)):
+    if check_sub_channel(await bot.get_chat_member(chat_id=channel_id, user_id=user_id)) and check_sub_channel(await bot.get_chat_member(chat_id=channel_id_1, user_id=user_id)):
         if not db.user_exists(user_id):
             db.create_user(user_id)
             await bot.send_message(ADMIN_ID, "🆕 Yangi Foydalanuvchi! \n"
